@@ -1,36 +1,36 @@
-// import PropTypes from "prop-types";
-
 import axios from "axios";
+
 import { useEffect, useState } from "react";
 
-const ContactsModal = ({ showModal, handleClose, handleShow }) => {
-  const [allContactsData, setAllContactsData] = useState([]);
+const UsContactsModal = ({ showModal2, handleClose2, handleShow2 }) => {
+  const [usContactsData, setUsContactsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [onlyEven, setOnlyEven] = useState(false);
+  //const [onlyEvenData, setOnlyEvenData] = useState([]);
 
   useEffect(() => {
-    if (showModal) {
-      fetchAllContacts();
+    if (showModal2) {
+      fetchUsContacts();
     }
     // console.log(allContactsData);
-  }, [showModal]);
+  }, [showModal2]);
 
-  const fetchAllContacts = async () => {
+  const fetchUsContacts = async () => {
     try {
-      if (page <= 30) {
+      if (page <= 2) {
         const res = await axios.get(
-          `https://contact.mediusware.com/api/contacts/?page=${page}`
+          `https://contact.mediusware.com/api/country-contacts/United%20States/?page=${page}`
         );
         const newData = res.data.results;
-        // console.log(newData);
-        setAllContactsData((prevData) => [...prevData, ...newData]);
+        //   console.log(newData);
+        setUsContactsData((prevData) => [...prevData, ...newData]);
         setPage((prevPage) => prevPage + 1);
       }
 
       //console.log(res.data.results);
     } catch (error) {
-      console.log("Fetch Problem Occur");
+      console.log("Fetch Problem Occur in US Contacts Data");
     } finally {
       setLoading(false);
     }
@@ -41,7 +41,7 @@ const ContactsModal = ({ showModal, handleClose, handleShow }) => {
       e.target.scrollHeight - e.target.scrollTop - e.target.clientHeight <= 1 &&
       !loading
     ) {
-      fetchAllContacts();
+      fetchUsContacts();
     }
   };
 
@@ -52,7 +52,7 @@ const ContactsModal = ({ showModal, handleClose, handleShow }) => {
 
   return (
     <div>
-      {showModal && (
+      {showModal2 && (
         <div
           className="modal fade show"
           tabIndex="-1"
@@ -61,11 +61,11 @@ const ContactsModal = ({ showModal, handleClose, handleShow }) => {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">All Contacts</h5>
+                <h5 className="modal-title">US Contacts</h5>
                 <button
                   type="button"
                   className="btn-close"
-                  onClick={handleClose}
+                  onClick={handleClose2}
                 ></button>
               </div>
               <div
@@ -73,15 +73,14 @@ const ContactsModal = ({ showModal, handleClose, handleShow }) => {
                 style={{ height: "200px", overflowY: "scroll" }}
                 onScroll={handleScroll}
               >
-                {/* Place your content for All Contacts here */}
                 {!onlyEven
-                  ? allContactsData.map((item, index) => (
+                  ? usContactsData.map((item, index) => (
                       <p key={index}>
                         ID:{item.id} &nbsp;&nbsp; CountryName:{" "}
                         {item.country.name}
                       </p>
                     ))
-                  : allContactsData
+                  : usContactsData
                       .filter((item) => item.id % 2 == 0)
                       .map((item, index) => (
                         <p key={index}>
@@ -94,7 +93,7 @@ const ContactsModal = ({ showModal, handleClose, handleShow }) => {
                 <button
                   type="button"
                   className="btn btn-secondary"
-                  onClick={handleClose}
+                  onClick={handleClose2}
                 >
                   Close
                 </button>
@@ -110,17 +109,8 @@ const ContactsModal = ({ showModal, handleClose, handleShow }) => {
           </div>
         </div>
       )}
-
-     
     </div>
   );
 };
 
-// ContactsModal.propTypes = {
-//   type: PropTypes.string,
-//   id: PropTypes.string,
-//   isOpenModal: PropTypes.bool,
-//   onClose: PropTypes.func,
-// };
-
-export default ContactsModal;
+export default UsContactsModal;

@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import ContactsModal from "./ContactsModal";
+import UsContactsModal from "./UsContactsModal";
 
 const Problem2 = () => {
   //   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
+  const [showModal2, setShowModal2] = useState(false);
 
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
+
+  const handleClose2 = () => setShowModal2(false);
+  const handleShow2 = () => setShowModal2(true);
 
   return (
     <div className="container">
@@ -28,27 +33,18 @@ const Problem2 = () => {
             handleShow={handleShow}
           ></ContactsModal>
 
-          {/* <button
-            className="btn"
-            onClick={() => {
-              document.getElementById("my_modal_1").showModal();
-              setIsOpenModal(true);
-            }}
+          <button
+            className="btn btn-lg btn-outline-warning"
+            type="button"
+            onClick={handleShow2}
           >
-            All Contacts
-          </button>
-          <ContactsModal
-            type="All Contacts"
-            id="my_modal_1"
-            isOpenModal={isOpenModal}
-            onClose={setIsOpenModal}
-          ></ContactsModal> */}
-
-          {/* Modal Of ALL Contacts */}
-
-          <button className="btn btn-lg btn-outline-warning" type="button">
             US Contacts
           </button>
+          <UsContactsModal
+            showModal2={showModal2}
+            handleClose2={handleClose2}
+            handleShow2={handleShow2}
+          ></UsContactsModal>
         </div>
       </div>
     </div>
