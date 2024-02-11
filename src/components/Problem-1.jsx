@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 
 const Problem1 = () => {
-  const [show, setShow] = useState("all");
+  const [show, setShow] = useState("All");
   const [name, setName] = useState("");
   const [status, setStatus] = useState("");
   const [tasks, setTasks] = useState([]);
   const [filteredTasks, setFilteredTasks] = useState([]);
-  const [isFiltered, setIsFiltered] = useState(false);
+  const [tryToFilter, setTryToFilter] = useState(false);
 
-  const handleClick = (val) => {
-    setShow(val);
-  };
+  //   const handleClick = (val) => {
+  //     setShow(val);
+  //   };
 
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem("tasks"));
@@ -32,6 +32,37 @@ const Problem1 = () => {
       setStatus("");
       //   console.log(name, status);
     }
+  };
+
+  const handleClick = (val) => {
+    // console.log(val);
+    setShow(val);
+
+    let filtered = tasks;
+    switch (val) {
+      case "Active":
+        filtered = tasks.filter((task) => task.status === "Active");
+        break;
+      case "Completed":
+        filtered = tasks.filter((task) => task.status === "Completed");
+        break;
+      default:
+        filtered = [
+          ...tasks.sort((a, b) => {
+            const statusPriority = {
+              Active: 1,
+              Completed: 2,
+              Pending: 3,
+              Archive: 4,
+            };
+
+            return statusPriority[a.status] - statusPriority[b.status];
+          }),
+        ];
+        //console.log(tasks);
+        break;
+    }
+    setFilteredTasks(filtered);
   };
 
   return (
@@ -56,7 +87,7 @@ const Problem1 = () => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Status"
+                placeholder="Status- Active/Completed/Pending/Archive"
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
               />
@@ -72,27 +103,36 @@ const Problem1 = () => {
           <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li className="nav-item">
               <button
-                className={`nav-link ${show === "all" && "active"}`}
+                className={`nav-link ${show === "All" && "active"}`}
                 type="button"
-                onClick={() => handleClick("all")}
+                onClick={() => {
+                  handleClick("All");
+                  setTryToFilter(true);
+                }}
               >
                 All
               </button>
             </li>
             <li className="nav-item">
               <button
-                className={`nav-link ${show === "active" && "active"}`}
+                className={`nav-link ${show === "Active" && "active"}`}
                 type="button"
-                onClick={() => handleClick("active")}
+                onClick={() => {
+                  handleClick("Active");
+                  setTryToFilter(true);
+                }}
               >
                 Active
               </button>
             </li>
             <li className="nav-item">
               <button
-                className={`nav-link ${show === "completed" && "active"}`}
+                className={`nav-link ${show === "Completed" && "active"}`}
                 type="button"
-                onClick={() => handleClick("completed")}
+                onClick={() => {
+                  handleClick("Completed");
+                  setTryToFilter(true);
+                }}
               >
                 Completed
               </button>
@@ -106,7 +146,21 @@ const Problem1 = () => {
                 <th scope="col">Status</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              {tryToFilter
+                ? filteredTasks.map((task, index) => (
+                    <tr key={index}>
+                      <td>{task.name}</td>
+                      <td>{task.status}</td>
+                    </tr>
+                  ))
+                : tasks.map((task, index) => (
+                    <tr key={index}>
+                      <td>{task.name}</td>
+                      <td>{task.status}</td>
+                    </tr>
+                  ))}
+            </tbody>
           </table>
         </div>
       </div>
